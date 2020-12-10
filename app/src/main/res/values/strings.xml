@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CoroutinesSamples</string>
+
+    // Home
+    <string name="post_title">Title</string>
+    <string name="post_body">Body</string>
+</resources>
