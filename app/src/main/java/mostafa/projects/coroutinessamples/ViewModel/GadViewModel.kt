@@ -1,8 +1,5 @@
-package mostafa.projects.coroutinessamples.ViewModel
+package appssquare.projects.cut.data.db
 
-import android.widget.Toast
-import androidx.constraintlayout.solver.widgets.Helper
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,25 +7,26 @@ import kotlinx.coroutines.launch
 import mostafa.projects.coroutinessamples.GadHelper
 import mostafa.projects.coroutinessamples.data.model.Post
 
-class GadViewModel : ViewModel() {
-    var postsData: LiveData<ArrayList<Post>> = MutableLiveData()
-    var error_msg :MutableLiveData<String> = MutableLiveData()
+class GadViewModel() : ViewModel() {
+
+    var postsData: MutableLiveData<ArrayList<Post>> = MutableLiveData()
+    var error_msg: MutableLiveData<String> = MutableLiveData()
 
 
-    init {
+     fun fetchPosts() {
         viewModelScope.launch {
-            postsData as MutableLiveData
+            var posts_code = GadHelper.GetServices().GetPosts().code()
+            when (posts_code) {
+                200 -> {
+                    postsData.postValue(GadHelper.GetServices().GetPosts().body())
+                }
+                else -> {
+                    var error = GadHelper.GetServices().GetPosts().errorBody()?.string()
+                    error_msg.postValue(error)
+                }
+            }
+
         }
     }
-    suspend fun GetPosts() {
-        var posts = GadHelper.GetServices().GetPosts()
-        when(posts.code()){
-            200 -> {
-                postsData.postValue(posts.body())
-            }
-            else -> {
-                error_msg.postValue(posts.errorBody()?.string())
-            }
-        }
-    }
+
 }

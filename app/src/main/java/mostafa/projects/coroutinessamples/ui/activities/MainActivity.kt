@@ -3,26 +3,24 @@ package mostafa.projects.coroutinessamples.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import appssquare.projects.cut.data.db.GadViewModel
 import com.crystal.crystalpreloaders.widgets.CrystalPreloader
 import kotlinx.coroutines.*
-import mostafa.projects.coroutinessamples.GadHelper
 import mostafa.projects.coroutinessamples.R
-import mostafa.projects.coroutinessamples.ViewModel.GadViewModel
 import mostafa.projects.coroutinessamples.data.model.Post
 import mostafa.projects.coroutinessamples.ui.adapter.PostsAdapter
-import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity()  , CoroutineScope  {
+class MainActivity : AppCompatActivity()  {
 
 
-    lateinit var postsJob: Job
 
     lateinit var posts_loading:CrystalPreloader
     lateinit var posts_recycler:RecyclerView
-    lateinit var adapter:PostsAdapter
+    lateinit var posts_adapter:PostsAdapter
+    var postsList:ArrayList<Post> = ArrayList()
 
     private val gadViewModel: GadViewModel by viewModels()
 
@@ -30,14 +28,20 @@ class MainActivity : AppCompatActivity()  , CoroutineScope  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         InitViews()
-        postsJob = Job()
         // Load Posts
-        showloading()
-        launch{
-            gadViewModel.GetPosts()
-            hideLoading()
-            posts_recycler.adapter = adapter
+        CoroutineScope(Dispatchers.Main).launch {
+            showloading()
+            withContext(Dispatchers.IO){
+                gadViewModel.fetchPosts()
+            }
+            gadViewModel.postsData.observe(this@MainActivity , Observer {
+                hideLoading()
+                postsList.addAll(it)
+                posts_adapter.notifyItemRangeInserted(postsList.size + 1 , it.size)
+            })
+
         }
+
 
 
     }
@@ -53,28 +57,11 @@ class MainActivity : AppCompatActivity()  , CoroutineScope  {
     private fun InitViews() {
         posts_recycler = findViewById(R.id.posts_recycler)
         posts_loading = findViewById(R.id.posts_loading)
+
+        posts_adapter = PostsAdapter(posts = postsList)
+        posts_recycler.adapter = posts_adapter
     }
 
-    suspend fun getPosts(): ArrayList<Post> {
-        var posts: ArrayList<Post> = ArrayList()
-        when (GadHelper.GetServices().GetPosts().code()) {
-            200 -> {
-                posts = GadHelper.GetServices().GetPosts().body()!!
-            }
-            else -> {
-                Toast.makeText(this , "error" , Toast.LENGTH_LONG).show()
-            }
-        }
-        return posts
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        postsJob.cancel()
-    }
-
-    override val coroutineContext: CoroutineContext
-        get() = postsJob + Dispatchers.Main
 
 
 }
