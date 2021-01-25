@@ -21,16 +21,21 @@ class GadViewModel() : ViewModel() {
 
     fun fetchPosts() {
         viewModelScope.launch {
-            when (gadRepositiory.GetPosts().code()) {
-                200 -> {
-                    var posts = gadRepositiory.GetPosts()
-                    postsData.postValue(posts.body())
+            try {
+                when (gadRepositiory.GetPosts().code()) {
+                    200 -> {
+                        var posts = gadRepositiory.GetPosts()
+                        postsData.postValue(posts.body())
+                    }
+                    else -> {
+                        var error = gadRepositiory.GetPosts().errorBody()?.string()
+                        error_msg.postValue(error)
+                    }
                 }
-                else -> {
-                    var error = gadRepositiory.GetPosts().errorBody()?.string()
-                    error_msg.postValue(error)
-                }
+            }catch (e:Exception){
+                error_msg.postValue(e.message)
             }
+
         }
     }
 
