@@ -1,4 +1,4 @@
-package mostafa.projects.coroutinessamples.data.requests
+package mostafa.projects.coroutinessamples.data.apis
 
 import mostafa.projects.coroutinessamples.data.model.Post
 import retrofit2.Response

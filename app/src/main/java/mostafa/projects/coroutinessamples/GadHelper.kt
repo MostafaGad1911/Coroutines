@@ -1,6 +1,6 @@
 package mostafa.projects.coroutinessamples
 
-import mostafa.projects.coroutinessamples.data.requests.ApiInterfaces
+import mostafa.projects.coroutinessamples.data.apis.ApiInterfaces
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
