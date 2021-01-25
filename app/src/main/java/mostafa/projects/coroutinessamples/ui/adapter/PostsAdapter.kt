@@ -10,6 +10,9 @@ import mostafa.projects.coroutinessamples.data.model.Post
 
 class PostsAdapter(var posts:ArrayList<Post>) : RecyclerView.Adapter<PostsAdapter.PostsHolder>() {
 
+
+
+
     class PostsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var post_title_txt = itemView.findViewById<TextView>(R.id.post_title_txt)
         var post_body_txt = itemView.findViewById<TextView>(R.id.post_body_txt)
@@ -27,8 +30,12 @@ class PostsAdapter(var posts:ArrayList<Post>) : RecyclerView.Adapter<PostsAdapte
         var post = posts.get(position)
         holder.post_title_txt.setText(post.title)
         holder.post_body_txt.setText(post.body)
+
     }
 
+    interface Posts{
+        fun GetComments(post_id:Int)
+    }
     override fun getItemCount(): Int {
        return posts.size
     }

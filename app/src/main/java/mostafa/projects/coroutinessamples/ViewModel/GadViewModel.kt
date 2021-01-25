@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import mostafa.projects.coroutinessamples.GadHelper
+import mostafa.projects.coroutinessamples.data.GadRepositiory
 import mostafa.projects.coroutinessamples.data.model.Post
 
 class GadViewModel() : ViewModel() {
+
+    var gadRepositiory:GadRepositiory = GadRepositiory()
 
     var postsData: MutableLiveData<ArrayList<Post>> = MutableLiveData()
     var error_msg: MutableLiveData<String> = MutableLiveData()
@@ -15,17 +18,8 @@ class GadViewModel() : ViewModel() {
 
      fun fetchPosts() {
         viewModelScope.launch {
-            var posts_code = GadHelper.GetServices().GetPosts().code()
-            when (posts_code) {
-                200 -> {
-                    postsData.postValue(GadHelper.GetServices().GetPosts().body())
-                }
-                else -> {
-                    var error = GadHelper.GetServices().GetPosts().errorBody()?.string()
-                    error_msg.postValue(error)
-                }
-            }
-
+            var posts = gadRepositiory.GetPosts()
+            postsData.postValue(posts)
         }
     }
 
