@@ -34,9 +34,6 @@ class MainActivity : BaseActivity() {
         // Load Posts
         CoroutineScope(Dispatchers.Main).launch {
             showloading()
-            withContext(Dispatchers.IO) {
-                gadViewModel.fetchPosts()
-            }
             gadViewModel.postsData.observe(this@MainActivity, Observer {
                 hideLoading()
                 postsList.addAll(it)

@@ -14,6 +14,10 @@ class GadViewModel() : ViewModel() {
     var postsData: MutableLiveData<ArrayList<Post>> = MutableLiveData()
     var error_msg: MutableLiveData<String> = MutableLiveData()
 
+    init {
+        fetchPosts()
+    }
+
 
     fun fetchPosts() {
         viewModelScope.launch {
