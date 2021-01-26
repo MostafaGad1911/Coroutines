@@ -3,6 +3,7 @@ package mostafa.projects.coroutinessamples.data.repositiory
 import mostafa.projects.coroutinessamples.GadHelper
 import mostafa.projects.coroutinessamples.data.model.Post
 import mostafa.projects.coroutinessamples.data.apis.ApiInterfaces
+import mostafa.projects.coroutinessamples.data.db.PostTable
 import retrofit2.Response
 
 class GadRepositiory {
@@ -11,7 +12,7 @@ class GadRepositiory {
         apiInterfaces = GadHelper.GetServices()
     }
 
-    suspend fun GetPosts(): Response<ArrayList<Post>> {
+    suspend fun GetPosts(): Response<ArrayList<PostTable>> {
         return apiInterfaces.GetPosts()!!
     }
 }

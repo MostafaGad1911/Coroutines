@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import mostafa.projects.coroutinessamples.R
+import mostafa.projects.coroutinessamples.data.db.PostTable
 import mostafa.projects.coroutinessamples.data.model.Post
 
-class PostsAdapter(var posts:ArrayList<Post>) : RecyclerView.Adapter<PostsAdapter.PostsHolder>() {
+class PostsAdapter(var posts:ArrayList<PostTable>) : RecyclerView.Adapter<PostsAdapter.PostsHolder>() {
 
 
 

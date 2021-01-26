@@ -5,4 +5,5 @@
     <string name="post_title">Title</string>
     <string name="post_body">Body</string>
     <string name="error">An error occurred</string>
+    <string name="offline">Offline mode</string>
 </resources>

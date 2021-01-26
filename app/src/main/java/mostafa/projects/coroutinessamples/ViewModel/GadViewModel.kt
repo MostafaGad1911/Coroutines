@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import mostafa.projects.coroutinessamples.data.db.PostTable
 import mostafa.projects.coroutinessamples.data.repositiory.GadRepositiory
 import mostafa.projects.coroutinessamples.data.model.Post
 import java.net.UnknownHostException
@@ -12,7 +13,7 @@ class GadViewModel() : ViewModel() {
 
     var gadRepositiory: GadRepositiory = GadRepositiory()
 
-    var postsData: MutableLiveData<ArrayList<Post>> = MutableLiveData()
+    var postsData: MutableLiveData<ArrayList<PostTable>> = MutableLiveData()
     var error_msg: MutableLiveData<String> = MutableLiveData()
 
     init {
