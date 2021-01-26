@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import mostafa.projects.coroutinessamples.data.repositiory.GadRepositiory
 import mostafa.projects.coroutinessamples.data.model.Post
+import java.net.UnknownHostException
 
 class GadViewModel() : ViewModel() {
 
@@ -32,7 +33,7 @@ class GadViewModel() : ViewModel() {
                         error_msg.postValue(error)
                     }
                 }
-            }catch (e:Exception){
+            }catch (e:UnknownHostException){
                 error_msg.postValue(e.message)
             }
 
