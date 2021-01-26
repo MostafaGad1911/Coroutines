@@ -17,10 +17,6 @@ class GadRoomDBViewModel(private val dbHelper: DatabaseHelper) :
     var error_msg:MutableLiveData<String> = MutableLiveData()
 
 
-    init {
-        fetchPosts()
-    }
-
     fun fetchPosts() {
         viewModelScope.launch {
             try {
