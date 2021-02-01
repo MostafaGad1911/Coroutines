@@ -9,9 +9,15 @@ import mostafa.projects.coroutinessamples.R
 import mostafa.projects.coroutinessamples.data.db.PostTable
 import mostafa.projects.coroutinessamples.data.model.Post
 
-class PostsAdapter(var posts:ArrayList<PostTable>) : RecyclerView.Adapter<PostsAdapter.PostsHolder>() {
+class PostsAdapter(var posts: ArrayList<PostTable>, var postsHelper: PostsHelper) :
+    RecyclerView.Adapter<PostsAdapter.PostsHolder>() {
 
 
+    var _postsHelper: PostsHelper
+
+    init {
+        _postsHelper = postsHelper
+    }
 
 
     class PostsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,12 +38,20 @@ class PostsAdapter(var posts:ArrayList<PostTable>) : RecyclerView.Adapter<PostsA
         holder.post_title_txt.setText(post.title)
         holder.post_body_txt.setText(post.body)
 
+        holder.itemView.setOnClickListener(object :View.OnClickListener{
+            override fun onClick(v: View?) {
+                _postsHelper.GetComments(post_id = post.id!!)
+            }
+
+        })
+
     }
 
-    interface Posts{
-        fun GetComments(post_id:Int)
+    interface PostsHelper {
+        fun GetComments(post_id: Int)
     }
+
     override fun getItemCount(): Int {
-       return posts.size
+        return posts.size
     }
 }

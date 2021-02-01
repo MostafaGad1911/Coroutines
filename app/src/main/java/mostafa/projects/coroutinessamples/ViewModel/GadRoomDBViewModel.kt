@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import appssquare.projects.cut.data.db.DatabaseHelper
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import mostafa.projects.coroutinessamples.data.db.PostTable
 
@@ -20,8 +21,8 @@ class GadRoomDBViewModel(private val dbHelper: DatabaseHelper) :
     fun fetchPosts() {
         viewModelScope.launch {
             try {
-                val postData = dbHelper.getPosts()
-                posts.postValue(postData)
+                val postData = async { dbHelper.getPosts() }
+                posts.postValue(postData.await())
             } catch (e: Exception) {
                 error_msg.postValue(e.message)
             }

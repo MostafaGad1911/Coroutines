@@ -20,16 +20,16 @@ import mostafa.projects.coroutinessamples.data.model.Post
 import mostafa.projects.coroutinessamples.ui.adapter.PostsAdapter
 import kotlin.coroutines.CoroutineContext
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), PostsAdapter.PostsHelper {
 
 
     lateinit var posts_loading: CrystalPreloader
     lateinit var posts_recycler: RecyclerView
     lateinit var posts_adapter: PostsAdapter
     var postsList: ArrayList<PostTable> = ArrayList()
-    lateinit var error_lyt:ConstraintLayout
+    lateinit var error_lyt: ConstraintLayout
 
-    val gadViewModel:GadViewModel by viewModels()
+    val gadViewModel: GadViewModel by viewModels()
     lateinit var roomDBViewModel: GadRoomDBViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,30 +49,25 @@ class MainActivity : BaseActivity() {
                 postsList.addAll(it)
                 posts_adapter.notifyItemRangeInserted(postsList.size + 1, it.size)
             })
-            roomDBViewModel.posts.observe(this@MainActivity , Observer {
+            roomDBViewModel.posts.observe(this@MainActivity, Observer {
                 postsList.clear()
                 error_lyt.visibility = View.GONE
-                if(it.size > 0){
+                if (it.size > 0) {
                     showToast(getString(R.string.offline))
                     postsList.addAll(it)
                     posts_adapter.notifyItemRangeInserted(postsList.size + 1, it.size)
-                }else{
+                } else {
                     error_lyt.visibility = View.VISIBLE
                 }
             })
-            gadViewModel.error_msg.observe(this@MainActivity , Observer {
+            gadViewModel.error_msg.observe(this@MainActivity, Observer {
                 hideLoading()
-//                showToast(it)
                 roomDBViewModel.fetchPosts()
-                error_lyt.visibility = View.VISIBLE
             })
-            roomDBViewModel.error_msg.observe(this@MainActivity , Observer {
+            roomDBViewModel.error_msg.observe(this@MainActivity, Observer {
                 hideLoading()
                 showToast(it)
             })
-
-
-
 
 
         }
@@ -103,7 +98,7 @@ class MainActivity : BaseActivity() {
         posts_recycler = findViewById(R.id.posts_recycler)
         posts_loading = findViewById(R.id.posts_loading)
         error_lyt = findViewById(R.id.error_lyt)
-        posts_adapter = PostsAdapter(posts = postsList)
+        posts_adapter = PostsAdapter(posts = postsList , postsHelper = this)
         posts_recycler.adapter = posts_adapter
     }
 
@@ -115,12 +110,15 @@ class MainActivity : BaseActivity() {
         super.onDestroy()
     }
 
+    override fun GetComments(post_id: Int) {
+        var comments_intent = Intent(this, PostsComments::class.java)
+        comments_intent.putExtra("post_id", post_id)
+        startActivity(comments_intent)
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 
-//    override fun GetComments(post_id: Int) {
-//        var comments_intent = Intent(this, PostComments::class.java)
-//        comments_intent.putExtra("post_id", post_id)
-//        startActivity(comments_intent)
-//        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-//    }
+    }
+
+
+
 
 }

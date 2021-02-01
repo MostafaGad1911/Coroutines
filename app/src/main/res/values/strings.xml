@@ -6,4 +6,8 @@
     <string name="post_body">Body</string>
     <string name="error">An error occurred</string>
     <string name="offline">Offline mode</string>
+
+    // Comments
+    <string name="name">Name</string>
+    <string name="email">Email</string>
 </resources>
